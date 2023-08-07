@@ -1,0 +1,43 @@
+﻿@page "/"
+@using AutoFixture
+
+<PageTitle>Index</PageTitle>
+
+<h1>Searching for... @SearchTerm</h1>
+
+<input @bind-value="SearchTerm" @bind-value:event="oninput" />
+<table>
+    <thead>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Username</th>
+    </thead>
+    <tbody>
+    @foreach (var customer in FilteredCustomers)
+    {
+        <tr>
+            <td>@customer.FirstName</td>
+            <td>@customer.LastName</td>
+            <td>@customer.Username</td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+@code {
+    public string SearchTerm { get; set; }
+    public List<Customer> Customers { get; set; }
+
+    public List<Customer> FilteredCustomers => String.IsNullOrWhiteSpace(SearchTerm)
+        ? Customers
+        : Customers.Where(x => x.FirstName.Contains(SearchTerm)
+                               || x.LastName.Contains(SearchTerm)
+                               || x.Username.Contains(SearchTerm))
+                   .ToList();
+
+    protected override void OnInitialized()
+    {
+        Customers = new Fixture().CreateMany<Customer>(1000).ToList();
+    }
+
+}
