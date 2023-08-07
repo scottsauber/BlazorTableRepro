@@ -13,14 +13,13 @@
         <th>Username</th>
     </thead>
     <tbody>
-    @foreach (var customer in FilteredCustomers)
-    {
+    <Virtualize Items="FilteredCustomers" Context="customer">
         <tr>
             <td>@customer.FirstName</td>
             <td>@customer.LastName</td>
             <td>@customer.Username</td>
         </tr>
-    }
+    </Virtualize>
     </tbody>
 </table>
 
@@ -37,7 +36,7 @@
 
     protected override void OnInitialized()
     {
-        Customers = new Fixture().CreateMany<Customer>(1000).ToList();
+        Customers = new Fixture().CreateMany<Customer>(10000).ToList();
     }
 
 }
